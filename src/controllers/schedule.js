@@ -12,8 +12,6 @@ const {
   update,
 } = require("../models/schedule");
 
-const { validateSchedule } = require("../validations/scheduleValidation");
-
 const getSchedule = async (req, res, next) => {
   let schedule;
   try {
@@ -104,10 +102,6 @@ module.exports = {
   getSchedule,
   getScheduleById: (req, res) => res.status(200).json(res.user),
   createSchedule: async (req, res) => {
-    const { error } = validateSchedule(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {
@@ -122,10 +116,6 @@ module.exports = {
     return res.status(500);
   },
   updateSchedule: async (req, res) => {
-    const { error } = validateSchedule(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {

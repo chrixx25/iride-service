@@ -14,12 +14,6 @@ const {
   getByUserName,
   updatePassword,
 } = require("../models/user");
-const {
-  validateLogin,
-  validateUpdateUser,
-  validatePassword,
-  validateUser,
-} = require("../validations/userValidations");
 
 const getUser = async (req, res, next) => {
   let user;
@@ -58,9 +52,9 @@ const getUser = async (req, res, next) => {
 
 module.exports = {
   loginUser: async (req, res) => {
-    const { error } = validateLogin(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+    // const { error } = validateLogin(req.body);
+    // if (error)
+    //   return res.status(400).send({ message: error.details[0].message });
 
     const { body } = req;
 
@@ -98,7 +92,7 @@ module.exports = {
           },
           process.env.TOKEN_NAME,
           {
-            expiresIn: "1h",
+            expiresIn: "2h",
           },
         );
         return res.status(200).json({
@@ -160,10 +154,6 @@ module.exports = {
   getMe: (req, res) => res.status(200).json(req.decoded.result),
   getUser,
   createUser: async (req, res) => {
-    const { error } = validateUser(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     const salt = genSaltSync(10);
@@ -185,9 +175,9 @@ module.exports = {
     return res.status(500);
   },
   updateUser: async (req, res) => {
-    const { error } = validateUpdateUser(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+    // const { error } = validateUpdateUser(req.body);
+    // if (error)
+    //   return res.status(400).send({ message: error.details[0].message });
 
     const { body } = req;
     // const decodedToken = req.decoded; // decoded token
@@ -211,10 +201,6 @@ module.exports = {
     }
   },
   updatePassword: async (req, res) => {
-    const { error } = validatePassword(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);

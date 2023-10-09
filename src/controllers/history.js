@@ -13,8 +13,6 @@ const {
   cancel,
 } = require("../models/history");
 
-const { validateHistory } = require("../validations/historyValidation");
-
 const getHistory = async (req, res, next) => {
   let history;
   try {
@@ -97,10 +95,6 @@ module.exports = {
   getHistory,
   getHistoryById: (req, res) => res.status(200).json(res.history),
   createHistory: async (req, res) => {
-    const { error } = validateHistory(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {
@@ -115,10 +109,6 @@ module.exports = {
     return res.status(500);
   },
   updateHistory: async (req, res) => {
-    const { error } = validateHistory(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {

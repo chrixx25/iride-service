@@ -6,8 +6,6 @@ const { parseInt } = require("lodash");
 
 const { create, get, getById, getTotal, update } = require("../models/bus");
 
-const { validateBus } = require("../validations/busValidation");
-
 const getBus = async (req, res, next) => {
   let bus;
   try {
@@ -62,10 +60,6 @@ module.exports = {
   getBus,
   getBusById: (req, res) => res.status(200).json(res.bus),
   createBus: async (req, res) => {
-    const { error } = validateBus(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {
@@ -80,10 +74,6 @@ module.exports = {
     return res.status(500);
   },
   updateBus: async (req, res) => {
-    const { error } = validateBus(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const { body } = req;
 
     try {
