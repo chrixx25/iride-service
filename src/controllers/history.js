@@ -53,10 +53,11 @@ module.exports = {
     const page = parseInt(req.query?.page || 1);
     const limit = parseInt(req.query?.limit || 10);
     const paging = parseInt(page * limit - limit);
+    const userId = req.decoded.result.isAdmin ? "" : req.decoded.result.id;
 
     try {
-      const results = await get(paging, limit);
-      const resultTotal = await getTotal();
+      const results = await get(paging, limit, userId);
+      const resultTotal = await getTotal(userId);
       const { total } = resultTotal;
       const pages = Math.ceil(resultTotal.total / limit);
       const data = results.map(
@@ -96,9 +97,11 @@ module.exports = {
   getHistoryById: (req, res) => res.status(200).json(res.history),
   createHistory: async (req, res) => {
     const { body } = req;
+    const userId = req.decoded.result.id;
 
     try {
-      const results = await create(body);
+      // eslint-disable-next-line node/no-unsupported-features/es-syntax
+      const results = await create({ ...body, userId });
 
       if (results) {
         return res.status(201).send(`History Sucessfully Created.`);

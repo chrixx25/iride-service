@@ -1,22 +1,26 @@
 const pool = require("../config/database");
 
 module.exports = {
-  get: (paging, limit) =>
+  get: (paging, limit, userId) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM history_view ORDER BY id LIMIT ?, ?`,
-        [paging, limit],
+        `SELECT * FROM history_view${
+          userId ? " WHERE UserId = ? " : " "
+        }ORDER BY id LIMIT ?, ?`,
+        [...(userId ? [userId] : []), paging, limit],
         (error, results, _fields) => {
           if (error) return reject(error);
           return resolve(results);
         },
       );
     }),
-  getTotal: () =>
+  getTotal: (userId) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `SELECT COUNT(*) total FROM history_table`,
-        [],
+        `SELECT COUNT(*) total FROM history_table${
+          userId ? " WHERE UserId = ?" : ""
+        }`,
+        [...(userId ? [userId] : [])],
         (error, results, _fields) => {
           if (error) return reject(error);
           return resolve(results[0]);
