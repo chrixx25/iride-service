@@ -71,23 +71,23 @@ module.exports = {
       if (isPasswordMatch) {
         const {
           id,
-          UserName,
+          Username,
           FirstName,
           MiddleName,
           LastName,
-          Email,
           MobileNo,
+          IsAdmin,
         } = results;
         const jsontoken = sign(
           {
             result: {
               id,
-              userName: UserName,
+              userName: Username,
               firstName: FirstName,
               middleName: MiddleName,
               lastName: LastName,
-              email: Email,
               mobileNo: MobileNo,
+              isAdmin: IsAdmin,
             },
           },
           process.env.TOKEN_NAME,
