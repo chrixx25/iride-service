@@ -11,11 +11,12 @@ const {
   getHistories,
   updateHistory,
   cancelBooking,
+  getHistoryById,
 } = require("../controllers/history");
 
 router.get("/", checkToken, getHistories);
 router.post("/", checkToken, validate(historySchema), createHistory);
-router.get("/:id", checkToken, getHistory, getHistory);
+router.get("/:id", checkToken, getHistory, getHistoryById);
 router.put(
   "/:id",
   checkToken,

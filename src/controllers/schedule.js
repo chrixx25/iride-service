@@ -100,7 +100,7 @@ module.exports = {
     }
   },
   getSchedule,
-  getScheduleById: (req, res) => res.status(200).json(res.user),
+  getScheduleById: (req, res) => res.status(200).json(res.schedule),
   createSchedule: async (req, res) => {
     const { body } = req;
 
