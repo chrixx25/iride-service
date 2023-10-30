@@ -24,7 +24,7 @@ const {
 router.post("/login", validate(loginSchema), loginUser);
 router.get("/me", checkToken, getMe);
 router.get("/", checkToken, getUsers);
-router.post("/", checkToken, validate(userSchema), createUser);
+router.post("/", validate(userSchema), createUser);
 router.get("/:id", checkToken, getUser, getUserById);
 router.put("/:id", checkToken, validate(updateUserSchema), getUser, updateUser);
 router.put(
