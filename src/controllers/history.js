@@ -130,7 +130,7 @@ module.exports = {
       const results = await cancel(req.params.id);
 
       if (results) {
-        return res.status(201).send(`Booking Canceled Succesfully`);
+        return res.status(201).send(`Booking Cancelled Succesfully`);
       }
     } catch (err) {
       return res.status(500).send(err.message);
