@@ -38,10 +38,17 @@ module.exports = {
     new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO
-          schedule_table ( DateFrom, DateTo, BusId, Destination, Fee )
+          schedule_table ( DateFrom, DateTo, BusId, Destination, Fee, Driver )
         VALUES
-          ( ?,?,?,?,? );`,
-        [data.dateFrom, data.dateTo, data.busId, data.destination, data.fee],
+          ( ?,?,?,?,?,? );`,
+        [
+          data.dateFrom,
+          data.dateTo,
+          data.busId,
+          data.destination,
+          data.fee,
+          data.driver,
+        ],
         (error, results, _fields) => {
           if (error) return reject(error);
           return resolve(results);
@@ -56,7 +63,8 @@ module.exports = {
                 DateTo = ?,
                 BusId = ?,
                 Destination = ?,
-                Fee = ?
+                Fee = ?,
+                Driver = ?
             WHERE
                 id = ?`,
         [
@@ -65,8 +73,25 @@ module.exports = {
           data.busId,
           data.destination,
           data.fee,
+          data.driver,
           id,
         ],
+        (error, results, _fields) => {
+          if (error) return reject(error);
+          return resolve(results);
+        },
+      );
+    }),
+  cancel: (id, data) =>
+    new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE
+          schedule_table
+        SET
+          Cancel = ?
+        WHERE
+            id = ?`,
+        [data.cancel ? 1 : 0, id],
         (error, results, _fields) => {
           if (error) return reject(error);
           return resolve(results);

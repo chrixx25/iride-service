@@ -70,6 +70,7 @@ module.exports = {
           Destination,
           Fee,
           Model,
+          ScheduleCancel,
         }) => ({
           id,
           userId: UserId,
@@ -79,6 +80,7 @@ module.exports = {
           destination: Destination,
           fee: Fee,
           model: Model,
+          scheduleCancel: ScheduleCancel,
         }),
       );
 

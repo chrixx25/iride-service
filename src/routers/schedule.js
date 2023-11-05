@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { checkToken } = require("../auth/tokenValidation");
 const { validate } = require("../utils/validate");
-const { scheduleSchema } = require("../schema/schedule");
+const { scheduleSchema, cancelSchema } = require("../schema/schedule");
 
 const {
   createSchedule,
@@ -11,6 +11,7 @@ const {
   getScheduleById,
   updateSchedule,
   getSchedule,
+  cancelSchedule,
 } = require("../controllers/schedule");
 
 router.get("/", checkToken, getSchedules);
@@ -22,6 +23,13 @@ router.put(
   validate(scheduleSchema),
   getSchedule,
   updateSchedule,
+);
+router.put(
+  "/cancel/:id",
+  checkToken,
+  validate(cancelSchema),
+  getSchedule,
+  cancelSchedule,
 );
 
 module.exports = router;

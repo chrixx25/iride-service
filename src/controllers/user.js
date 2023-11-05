@@ -23,7 +23,7 @@ const getUser = async (req, res, next) => {
 
     const {
       Id,
-      UserName,
+      Username,
       Password,
       FirstName,
       MiddleName,
@@ -33,7 +33,7 @@ const getUser = async (req, res, next) => {
     } = results;
     const data = {
       id: Id,
-      userName: UserName,
+      username: Username,
       password: Password,
       firstName: FirstName,
       middleName: MiddleName,

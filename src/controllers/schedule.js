@@ -10,6 +10,7 @@ const {
   getById,
   getTotal,
   update,
+  cancel,
 } = require("../models/schedule");
 
 const getSchedule = async (req, res, next) => {
@@ -29,6 +30,8 @@ const getSchedule = async (req, res, next) => {
       PlateNumber,
       Slot,
       RemainingSlots,
+      Driver,
+      Cancel,
     } = results;
     const data = {
       id,
@@ -41,6 +44,8 @@ const getSchedule = async (req, res, next) => {
       plateNumber: PlateNumber,
       slot: Slot,
       remainingSlots: RemainingSlots,
+      driver: Driver,
+      cancel: Cancel,
     };
     schedule = data;
     res.schedule = schedule;
@@ -74,6 +79,8 @@ module.exports = {
           PlateNumber,
           Slot,
           RemainingSlots,
+          Driver,
+          Cancel,
         }) => ({
           id,
           dateFrom: DateFrom,
@@ -85,6 +92,8 @@ module.exports = {
           plateNumber: PlateNumber,
           slot: Slot,
           remainingSlots: RemainingSlots,
+          driver: Driver,
+          cancel: Cancel,
         }),
       );
 
@@ -123,6 +132,24 @@ module.exports = {
 
       if (results) {
         return res.status(201).send(`Schedule Sucessfully Updated.`);
+      }
+    } catch (err) {
+      return res.status(500).send(err.message);
+    }
+    return res.status(500);
+  },
+  cancelSchedule: async (req, res) => {
+    const { body } = req;
+
+    try {
+      const results = await cancel(req.params.id, body);
+
+      if (results) {
+        return res
+          .status(201)
+          .send(
+            `Schedule is ${body.cancel ? "Cancelled" : "Reopened"} Succesfully`,
+          );
       }
     } catch (err) {
       return res.status(500).send(err.message);
