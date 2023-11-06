@@ -4,7 +4,7 @@ module.exports = {
   get: (paging, limit) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM schedule_view ORDER BY id LIMIT ?, ?`,
+        `SELECT * FROM schedule_view ORDER BY CreatedDate DESC LIMIT ?, ?`,
         [paging, limit],
         (error, results, _fields) => {
           if (error) return reject(error);

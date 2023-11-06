@@ -6,7 +6,7 @@ module.exports = {
       pool.query(
         `SELECT * FROM history_view${
           userId ? " WHERE UserId = ? " : " "
-        }ORDER BY id LIMIT ?, ?`,
+        }ORDER BY CreatedDate DESC LIMIT ?, ?`,
         [...(userId ? [userId] : []), paging, limit],
         (error, results, _fields) => {
           if (error) return reject(error);
