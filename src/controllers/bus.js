@@ -4,7 +4,14 @@ require("dotenv").config();
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { parseInt } = require("lodash");
 
-const { create, get, getById, getTotal, update } = require("../models/bus");
+const {
+  create,
+  get,
+  getById,
+  getTotal,
+  update,
+  getByPlateNumber,
+} = require("../models/bus");
 
 const getBus = async (req, res, next) => {
   let bus;
@@ -61,6 +68,12 @@ module.exports = {
   getBusById: (req, res) => res.status(200).json(res.bus),
   createBus: async (req, res) => {
     const { body } = req;
+
+    const isPlateNumber = await getByPlateNumber(body.plateNumber);
+    if (isPlateNumber)
+      return res
+        .status(400)
+        .send(`${body.plateNumber} plate number already exists.`);
 
     try {
       const results = await create(body);

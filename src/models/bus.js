@@ -66,4 +66,15 @@ module.exports = {
         },
       );
     }),
+  getByPlateNumber: (plateNumber) =>
+    new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT * FROM bus_table WHERE PlateNumber = ?`,
+        [plateNumber],
+        (error, results, _fields) => {
+          if (error) return reject(error);
+          return resolve(results[0]);
+        },
+      );
+    }),
 };
