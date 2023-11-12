@@ -38,9 +38,9 @@ module.exports = {
     new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO
-          schedule_table ( DateFrom, DateTo, BusId, Destination, Fee, Driver )
+          schedule_table ( id, DateFrom, DateTo, BusId, Destination, Fee, Driver )
         VALUES
-          ( ?,?,?,?,?,? );`,
+          ( UUID(),?,?,?,?,?,? );`,
         [
           data.dateFrom,
           data.dateTo,

@@ -42,9 +42,9 @@ module.exports = {
     new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO
-          history_table ( UserId, ScheduleId )
+          history_table ( id, UserId, ScheduleId )
         VALUES
-          ( ?, ? );   `,
+          ( UUID(), ?, ? );   `,
         [data.userId, data.scheduleId],
         (error, results, _fields) => {
           if (error) return reject(error);

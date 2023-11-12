@@ -38,9 +38,9 @@ module.exports = {
     new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO
-          bus_table ( Model, PlateNumber, Slot )
+          bus_table ( id, Model, PlateNumber, Slot )
         VALUES
-          ( ?,?,? )`,
+          ( UUID(),?,?,? )`,
         [data.model, data.plateNumber, data.slot],
         (error, results, _fields) => {
           if (error) return reject(error);

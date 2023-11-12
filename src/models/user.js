@@ -38,13 +38,14 @@ module.exports = {
     new Promise((resolve, reject) => {
       pool.query(
         `INSERT INTO user_table (
+                id,
                 Username,
                 Password,
                 FirstName,
                 LastName,
                 MobileNo,
                 IsAdmin
-            ) VALUE (?,?,?,?,?,?)`,
+            ) VALUE (UUID(),?,?,?,?,?,?)`,
         [
           data.userName,
           data.password,
