@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const port = process.env.APP_PORT || 3000;
+const PORT = process.env.APP_PORT || 5000;
 const UserRouter = require("./routers/user");
 const ScheduleRouter = require("./routers/schedule");
 const BusRouter = require("./routers/bus");
@@ -22,6 +22,7 @@ app.use("/iride/schedules", ScheduleRouter);
 app.use("/iride/buses", BusRouter);
 app.use("/iride/histories", HistoryRouter);
 
-app.listen(process.env.APP_PORT, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Server is running....`);
 });
