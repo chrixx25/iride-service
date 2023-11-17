@@ -14,9 +14,9 @@ const validate =
       });
       return next();
     } catch (error) {
-      const zorError = error as z.ZodError;
+      const zodError = error as z.ZodError;
       return res.status(400).json(
-        map(zorError.issues, ({ path, message }) => ({
+        map(zodError.issues, ({ path, message }) => ({
           field: path[1],
           message,
         })),

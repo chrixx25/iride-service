@@ -1,10 +1,14 @@
-type Table<Result> = {
-  results: Result[];
-  page: number;
-  pages: number;
-  size: number;
-  total: number;
-};
+import type { Table } from "./api.types";
+import type { JwtPayload } from "jsonwebtoken";
+
+import { z } from "zod";
+
+import {
+  userSchema,
+  loginSchema,
+  updateUserSchema,
+  passwordSchema,
+} from "../schema/user";
 
 export type UsersModel = {
   id: string;
@@ -15,7 +19,7 @@ export type UsersModel = {
   LastName: string;
   MobileNo: string;
   IsAdmin: boolean;
-}[];
+};
 
 export type UserResBody = {
   id: string;
@@ -30,35 +34,31 @@ export type UserResBody = {
 
 export type UsersResBody = Table<UserResBody>;
 
+type Me = JwtPayload & { result: Omit<UserResBody, "password"> };
+
 export type Decoded = {
-  result: Omit<UserResBody, "password">;
-  iat: number;
-  exp: number;
+  decoded?: Me | string;
 };
 
-export type UserParams = {
+export type UserQuery = {
   id?: number;
   page?: number;
   size?: number;
-  paging: number;
 };
 
 export type SuccessRes = {
   message: string;
 };
 
-export type CreateUserReqBody = {
-  userName: string;
-  firstName: string;
-  lastName: string;
-  mobileNo: string;
-  password: string;
-  admin?: boolean;
+export type LoginResBody = {
+  message: string;
+  token: string;
 };
 
-export type UpdateUserReqBody = {
-  userName: string;
-  firstName: string;
-  lastName: string;
-  mobileNo: string;
-};
+export type CreateUserReqBody = z.infer<typeof userSchema>["body"];
+
+export type UpdateUserReqBody = z.infer<typeof updateUserSchema>["body"];
+
+export type UpdatePasswordReqBody = z.infer<typeof passwordSchema>["body"];
+
+export type LoginReqBody = z.infer<typeof loginSchema>["body"];

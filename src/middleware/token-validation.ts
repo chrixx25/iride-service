@@ -1,25 +1,23 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Request, Response, NextFunction } from "express";
-import { verify, JwtPayload } from "jsonwebtoken";
+import type { Decoded } from "../types/user.types";
 
-type DecodeResBody = {
-  decoded?: string | JwtPayload;
-};
+import { Request, Response, NextFunction } from "express";
+import { verify } from "jsonwebtoken";
 
 const checkToken = (
-  req: Request & DecodeResBody,
+  req: Request & Decoded,
   res: Response,
   next: NextFunction,
 ) => {
   const token = req.get("Authorization");
   if (token) {
-    verify(token.slice(7), process.env.TOKEN_NAME, (err, decoded) => {
+    verify(token.slice(7), process.env.TOKEN_NAME as string, (err, decoded) => {
       if (err) {
         return res.status(403).json({
           message: "Invalid Token.",
         });
       }
-      req.decoded = decoded;
+      req.decoded = decoded as Decoded["decoded"];
       next();
     });
     return false;
