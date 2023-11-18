@@ -7,7 +7,7 @@ module.exports = {
         `SELECT * FROM schedule_view${
           isAdmin
             ? " "
-            : " WHERE DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m') "
+            : " DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m') OR DateFrom > NOW() "
         }ORDER BY CreatedDate DESC LIMIT ?, ?`,
         [paging, limit],
         (error, results, _fields) => {
