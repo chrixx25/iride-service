@@ -1,10 +1,14 @@
 const pool = require("../config/database");
 
 module.exports = {
-  get: (paging, limit) =>
+  get: (paging, limit, isAdmin) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM schedule_view ORDER BY CreatedDate DESC LIMIT ?, ?`,
+        `SELECT * FROM schedule_view${
+          isAdmin
+            ? " "
+            : " WHERE DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m') "
+        }ORDER BY CreatedDate DESC LIMIT ?, ?`,
         [paging, limit],
         (error, results, _fields) => {
           if (error) return reject(error);
@@ -12,10 +16,33 @@ module.exports = {
         },
       );
     }),
-  getTotal: () =>
+  getByDateInterval: (dateFrom, dateTo) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `SELECT COUNT(*) total FROM schedule_table`,
+        `SELECT
+          *
+        FROM
+          schedule_table
+        WHERE
+          DateFrom BETWEEN ? and DateTo = ?
+          OR
+          ? BETWEEN DateFrom AND DateTo
+        ORDER BY DateFrom`,
+        [dateFrom, dateTo, dateFrom],
+        (error, results, _fields) => {
+          if (error) return reject(error);
+          return resolve(results);
+        },
+      );
+    }),
+  getTotal: (isAdmin) =>
+    new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT COUNT(*) total FROM schedule_table${
+          isAdmin
+            ? ""
+            : " WHERE DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m')"
+        }`,
         [],
         (error, results, _fields) => {
           if (error) return reject(error);

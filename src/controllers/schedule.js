@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { parseInt } = require("lodash");
+const { parseInt, map, uniq } = require("lodash");
 
 const {
   create,
@@ -11,6 +11,7 @@ const {
   getTotal,
   update,
   cancel,
+  getByDateInterval,
 } = require("../models/schedule");
 
 const getSchedule = async (req, res, next) => {
@@ -61,10 +62,11 @@ module.exports = {
     const page = parseInt(req.query?.page || 1);
     const limit = parseInt(req.query?.limit || 10);
     const paging = parseInt(page * limit - limit);
+    const { isAdmin } = req.decoded.result;
 
     try {
-      const results = await get(paging, limit);
-      const resultTotal = await getTotal();
+      const results = await get(paging, limit, isAdmin);
+      const resultTotal = await getTotal(isAdmin);
       const { total } = resultTotal;
       const pages = Math.ceil(resultTotal.total / limit);
       const data = results.map(
@@ -109,13 +111,38 @@ module.exports = {
     }
   },
   getSchedule,
-  getScheduleById: (req, res) => res.status(200).json(res.schedule),
+  getScheduleById: (_req, res) => res.status(200).json(res.schedule),
+  checkConflict: async (req, res, next) => {
+    const { body } = req;
+
+    try {
+      const conflictResult = await getByDateInterval(
+        body.dateFrom,
+        body.dateTo,
+      );
+      if (conflictResult && conflictResult.length > 0) {
+        const schedules = map(conflictResult, ({ Destination }) => Destination);
+        const scheduleList = new Intl.ListFormat("en", {
+          style: "long",
+          type: "conjunction",
+        }).format(uniq(schedules));
+
+        return res.status(400).json({
+          message: `It has a conflict date with ${scheduleList} schedule${
+            schedules.length > 1 ? "s" : ""
+          }.`,
+        });
+      }
+      return next();
+    } catch (err) {
+      return res.status(500).send(err.message);
+    }
+  },
   createSchedule: async (req, res) => {
     const { body } = req;
 
     try {
       const results = await create(body);
-
       if (results) {
         return res.status(201).send(`Schedule Sucessfully Created.`);
       }
