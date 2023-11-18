@@ -12,24 +12,14 @@ const {
   updateSchedule,
   getSchedule,
   cancelSchedule,
+  checkConflict,
 } = require("../controllers/schedule");
 
-router.get("/", checkToken, getSchedules);
-router.post("/", checkToken, validate(scheduleSchema), createSchedule);
-router.get("/:id", checkToken, getSchedule, getScheduleById);
-router.put(
-  "/:id",
-  checkToken,
-  validate(scheduleSchema),
-  getSchedule,
-  updateSchedule,
-);
-router.put(
-  "/cancel/:id",
-  checkToken,
-  validate(cancelSchema),
-  getSchedule,
-  cancelSchedule,
-);
+router.use(checkToken);
+router.get("/", getSchedules);
+router.post("/", validate(scheduleSchema), checkConflict, createSchedule);
+router.get("/:id", getSchedule, getScheduleById);
+router.put("/:id", validate(scheduleSchema), updateSchedule);
+router.put("/cancel/:id", validate(cancelSchema), cancelSchedule);
 
 module.exports = router;
