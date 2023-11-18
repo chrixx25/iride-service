@@ -81,7 +81,10 @@ const loginUser = async (
       .json({ message: "Username or Password is incorrect." });
   } catch (err) {
     const error = err as MysqlError;
-    return res.status(500).send({ message: error.message });
+    console.log(error);
+    return res
+      .status(500)
+      .send({ message: error.message || "Something Wen't Wrong" });
   }
 };
 
@@ -194,14 +197,13 @@ const createUser = async (
 
     if (results) {
       return res.status(201).send({
-        message: `${body.firstName} ${body.lastName} sucessfully created.`,
+        message: `${body.firstName} ${body.lastName} is sucessfully created.`,
       });
     }
   } catch (err) {
     const error = err as MysqlError;
     return res.status(500).send({ message: error.message });
   }
-  return res.status(500);
 };
 
 const updateUser = async (
@@ -209,17 +211,12 @@ const updateUser = async (
   res: Response<{ message: string }>,
 ) => {
   const { body } = req;
-  const isUserNameMatch = await getByUserName(body.userName);
-  if (isUserNameMatch)
-    return res
-      .status(400)
-      .send({ message: `${body.userName} username already exists.` });
 
   try {
     const results = await update(req.params.id, body);
     if (results) {
       return res.status(200).send({
-        message: `${body.firstName} ${body.lastName} sucessfully updated.`,
+        message: `${body.firstName} ${body.lastName} is sucessfully updated.`,
       });
     }
     return res.status(400).send({ message: "Failed to update." });
@@ -237,18 +234,22 @@ const changePassword = async (
   const salt = genSaltSync(10);
   body.password = hashSync(body.password, salt);
 
-  try {
-    const results = await updatePassword(req.params.id, body);
-    if (results) {
-      return res.status(200).send({
-        message: `Password is sucessfully updated.`,
-      });
+  if (typeof req?.decoded === "object") {
+    const id = req.decoded.result.id;
+    try {
+      const results = await updatePassword(id, body);
+      if (results) {
+        return res.status(200).send({
+          message: `Password is sucessfully updated.`,
+        });
+      }
+      return res.status(400).send({ message: "Failed to update." });
+    } catch (err) {
+      const error = err as MysqlError;
+      return res.status(500).send({ message: error.message });
     }
-    return res.status(400).send({ message: "Failed to update." });
-  } catch (err) {
-    const error = err as MysqlError;
-    return res.status(500).send({ message: error.message });
   }
+  return res.status(500).send({ message: "Invalid Token" });
 };
 
 export {

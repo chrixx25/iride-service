@@ -24,10 +24,10 @@ router.post("/login", validate(loginSchema), loginUser);
 
 router.use(checkToken);
 router.get("/me", getMe);
+router.put("/change-password", validate(passwordSchema), changePassword);
 router.get("/", getUsers);
 router.get("/:id", getUser);
 router.post("/", validate(userSchema), createUser);
 router.put("/:id", validate(updateUserSchema), updateUser);
-router.put("/change-password/:id", validate(passwordSchema), changePassword);
 
 export default router;
