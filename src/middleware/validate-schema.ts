@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { Request, Response, NextFunction } from "express";
 import { map } from "lodash";
 import { z } from "zod";

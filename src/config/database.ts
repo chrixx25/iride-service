@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 // import { parseInt } from "lodash";
 import { createPool } from "mysql";
 import "dotenv/config";

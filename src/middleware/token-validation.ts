@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import type { Decoded } from "../types/user.types";
 
 import { Request, Response, NextFunction } from "express";
