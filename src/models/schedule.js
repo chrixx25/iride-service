@@ -41,7 +41,7 @@ module.exports = {
         `SELECT COUNT(*) total FROM schedule_table${
           isAdmin
             ? ""
-            : " WHERE DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m')"
+            : " WHERE DATE_FORMAT(DateFrom,'%Y-%d-%m') = DATE_FORMAT(NOW(),'%Y-%d-%m') OR DateFrom > NOW() "
         }`,
         [],
         (error, results, _fields) => {
