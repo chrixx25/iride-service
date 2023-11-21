@@ -8,7 +8,7 @@ import {
   loginSchema,
   updateUserSchema,
   passwordSchema,
-} from "../schema/user";
+} from "../schemas/user.schema";
 
 export type UsersModel = {
   id: string;

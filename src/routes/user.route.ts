@@ -16,7 +16,7 @@ import {
   updateUserSchema,
   userSchema,
   passwordSchema,
-} from "../schema/user";
+} from "../schemas/user.schema";
 
 const router = Router();
 

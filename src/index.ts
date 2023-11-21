@@ -15,7 +15,7 @@ app.use(
   }),
 );
 
-app.use("/iride/users", userRounter);
+app.use("/v1/users", userRounter);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
